@@ -1,0 +1,38 @@
+#NEXUS
+BEGIN DATA;
+	DIMENSIONS NTAX=31 NCHAR=21;
+	FORMAT DATATYPE = STANDARD GAP = - MISSING = ? SYMBOLS = "01234";
+	MATRIX
+	Penaeus		                    0?0000000000000000000
+	Palaeopentacheles		          10000010000003111000?
+	Scyllarus		                  100000100000241112000
+	Eryma		                      21100011211100101010?
+	Phlyctisoma		                21100112301100101010?
+	Enoploclytia		               21100012311100101010?
+	Pemphix		                    21000113301110101?10?
+	Pseudopemphix		              210121133011001?1??0?
+	Clytiopsis		                 21000011101100?01010?
+	Glyphea		                    00010011201112101010?
+	Mecochirus		                 00010011201011201010?
+	Pseudoglyphea		              00010011201010101010?
+	Chimaerastacus		             20011011101100101010?
+	Astacus		                    200000100000001012101
+	Cambarus		                   200000100000001012101
+	Nephrops		                   000000003110001111100
+	Homarus		                    210001003110001011100
+	Hoploparia		                 20000000311000101010?
+	Carcinus		                   300000200000021030210
+	Cancer		                     300000200000021030210
+	Dromia		                     300000200000021030010
+	Galathea		                   100000100000021022011
+	Linuparus		                  100000100000240013000
+	Stenopus		                   000000110010003000000
+	Neoglyphea		                 010100112011101010101
+	Virilastacus		               200000100000001010101
+	Enoplometopus		              000000000000001010100
+	Callianasa		                 000000100000011010011
+	Laomedia		                   0?0000200000021010111
+	Pagurus		                    100000100000021020211
+	Panulirus		                  100000100000240013000
+    ;
+END;

@@ -1,0 +1,64 @@
+#NEXUS
+BEGIN DATA;
+	DIMENSIONS NTAX=56 NCHAR=17;
+	FORMAT DATATYPE = STANDARD GAP = - MISSING = ? SYMBOLS = "0123";
+	MATRIX
+	Marchantia		                           000???????000000?
+	Haplomitrium		                         000???????000000?
+	Anthoceros		                           001???????000000?
+	Polytrichum		                          000???????000000?
+	Sphagnum		                             000???????000000?
+	Hymenophyllum		                        000?000000110000?
+	Osmunda		                              00010010001?0000?
+	Psilotum		                             000?000000201100?
+	Tmesipteris		                          000?000000201100?
+	Danaea		                               0001001110210000?
+	Equisetum_1		                          111?1000012000111
+	Equisetum_2		                          111?1000012000111
+	Angiopteris		                          0001001110210000?
+	Huperzia		                             000?000000201000?
+	Selaginella		                          000?000000201000?
+	Isoetes		                              000?000?00201000?
+	Marattia		                             0001001110210000?
+	Ophioglossum		                         0000001100200000?
+	Botrychium		                           000(01)001100(12)00000?
+	Dicksonia		                            0002001110110000?
+	Plagiogyria		                          0002001110210000?
+	Pteridium		                            0002001100210000?
+	Blechnum		                             0002001110210000?
+	Phanerosorus		                         0002001100210000?
+	Lygodium		                             0002000000210000?
+	Gleichenia		                           0002000000210000?
+	Marsilea		                             0002001100210000?
+	Salvinia		                             000?001100100000?
+	Azolla		                               000?00??00100000?
+	Cyathea		                              0002001110210000?
+	Cycas		                                1002010000110000?
+	Gnetum		                               1000010000000000?
+	Ginkgo		                               100?0100001?0000?
+	Pinus		                                1000010000210000?
+	Austrobaileya		                        1000010000201000?
+	Chloranthus		                          1000010000201000?
+	Aglaophyton_major		                    000?000000000000?
+	Psilophyton_crenulatum		               000?000000000000?
+	Rhacophyton_ceratangium		              ?00?00000?000000?
+	Biscalitheca_musata		                  0003000000210000?
+	Corynepteris_involucrata		             0003000000210000?
+	Stauropteris_burntislandica		          100?000000000000?
+	Stauropteris_oldhamia		                100?000000000000?
+	Gillespiea_randolphensis		             100?000000000000?
+	Psaronius		                            0001001110210000?
+	Ankyropteris_brongniartii		            1001000000210000?
+	Sermaya		                              ?001000000210000?
+	Botryopteris_tridentata		              ?001001100210000?
+	Psalixochlaena_cylindrica		            0001000000210000?
+	Anachoropteris_clavata		               0001000000210000?
+	Hydropteris_pinnata		                  0?01??????210000?
+	Calamites		                            11101000012100110
+	Archaeocalamites		                     1(01)1?10000120001??
+	Archaeopteris		                        0000000000200000?
+	Elkinsia_polymorpha		                  ??01000000000000?
+	Lyginopteris_oldhamia		                1001010000210000?
+;
+END;
+

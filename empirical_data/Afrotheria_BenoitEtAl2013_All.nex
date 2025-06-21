@@ -1,0 +1,30 @@
+#NEXUS
+BEGIN DATA;
+	DIMENSIONS NTAX=22 NCHAR=27;
+	FORMAT DATATYPE = STANDARD GAP = - MISSING = ? SYMBOLS = "012";
+	MATRIX
+	Kulbeckia                    ?0?00010100000010-001001001
+	Phenacodus                   ?0?0?111100000000-0????????
+	Meniscotherium               ?0?00011100000000-0????????
+	Hyopsodus                    ?0001011100000000-001101001
+	Pleuraspidotherium           ?0?00111100000010-0111?????
+	Arctocyon                    ?0?00111100000000-011??1???
+	Orycteropus                  00001111100000010-011011001
+	Megalohyrax                  (1 2)0?????0????????1-?????????
+	Procavia                     20000110000000011-000100000
+	Arsinoitherium               ?(0 1)011000000100101-000000000
+	Phosphatherium               ?0?0?110000000001-?00??????
+	Numidotherium                110000010?0100101-0000?10??
+	Moeritherium                 ?10110?00?01???01-0001?????
+	Elephantoidea                1101(0 1)010000100(0 1)11-000000000
+	Chambi_sirenian              ??1?0010001000001-00?111111
+	Prorastomus                  001010000011001020100010111
+	Eosiren                      00?1?0000?1010?121?10??????
+	Eotheroides                  00?1?0?001101??120?10??????
+	Protosirenidae_n.gen._n.sp.  ???1?0000?10?1-120?10??????
+	Protosiren                   00?1?000011011-12(0 1)?10??????
+	Dugong                       0011?00001101011201100?0101
+	Trichechus                   00111000011011-120110010111
+;
+END;
+
