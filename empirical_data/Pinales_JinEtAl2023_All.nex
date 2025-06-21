@@ -1,0 +1,29 @@
+#NEXUS
+BEGIN DATA;
+	DIMENSIONS NTAX=21 NCHAR=17;
+	FORMAT DATATYPE = STANDARD GAP = - MISSING = ? SYMBOLS = "012";
+	MATRIX
+	Picea_abies		                             02020100200010010
+	Pinus_contorta		                          12021000200100110
+	Podocarpus_latifolius		                   20102000211010100
+	Taiwania_cryptomerioides		                00010000211001010
+	Cunninghamia_lanceolata		                 11020101211111010
+	Elatides_zhoui		                          11020101211121010
+	Sewardiodendron_laxum		                   12020101211011010
+	Athrotaxis_laxifolia		                    10011000211001010
+	Taxodium_distichum		                      11011000001001010
+	Hirmeriella_muensteri		                   01010020112002111
+	Kachaikestrobus_acuminatus		              00010020112002111
+	Tomaxellia_biforme		                      11010020112000111
+	Pseudohirmeriella_delawarensis		          1101002011200????
+	Pararaucaria_patagonica		                 1201001011???????
+	Pararaucaria_taquetrensis		               000100101120?????
+	Pararaucaria_laiyangensis		               10010010112000111
+	Sciadopitys_verticillata		                02011002111011020
+	Araucaria_araucana		                      11020000012000010
+	Araucaria_bidwillii		                     11020000012000010
+	Araucaria_famii		                         11020000012000010
+	Araucaria_mirabilis		                     12020000012000???
+    ;
+    END;
+
