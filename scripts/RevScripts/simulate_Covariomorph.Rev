@@ -1,0 +1,55 @@
+# RevBayes Script -- simulating morphological sequences with the covarion model
+# Authors -- Basanta Khakurel and Sebastian Höhna
+
+NUM_REPS              = args[1]
+NUM_SITES             = args[2]
+OUTPUT_DIR            = args[3]
+SWITCHING_RATE        = args[4]
+NSTATES               = args[5]
+NUM_CATEGORIES        = args[6]
+
+# read in the starting tree
+starting_tree <- readTrees("data/plants.map.tre")[1]
+
+# create that many matrices
+for (i in 1:NUM_CATEGORIES) {
+    Q_sub[i] := fnJC(NSTATES)
+}
+
+## Rate Scalars
+# mean
+mean_category <- 0.0
+
+# sd
+H = abs(ln(10)/(qnorm(0.975) - qnorm(0.025)))
+sd_category := 2 * H
+
+rate_scalars := normalize(fnDiscretizeDistribution(dnLognormal(mean_category, sd_category), NUM_CATEGORIES))
+
+# assuming equal rate of switching
+global_switch_rate = SWITCHING_RATE
+
+for (i in 1:NUM_CATEGORIES) {
+    for (j in 1:NUM_CATEGORIES) {
+        if (i == j) {
+            switch_rates[i][j] := 0.0
+        } else {
+            switch_rates[i][j] := global_switch_rate
+        }
+    }
+}
+
+# creating the Q matrix.
+Q_Cov := fnCovarion(Q_sub, RateScalars = rate_scalars, SwitchRates = switch_rates, rescaled = FALSE)
+
+# simulating matrix
+seq_Cov ~ dnPhyloCTMC(tree=starting_tree, Q=Q_Cov, type="Standard",  nSites=NUM_SITES)
+
+for (i in 1:NUM_REPS) {
+  seq_Cov.redraw()
+  # write sequences to file
+  writeNexus(file= OUTPUT_DIR + "/morpho_" + i + ".nex", seq_Cov)
+}
+
+# quit RevBayes
+q()

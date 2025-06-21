@@ -1,0 +1,70 @@
+# RevBayes Script -- Main MCMC settings
+# Authors -- Basanta Khakurel and Sebastian Höhna
+
+## arguments to be suppllied using --args
+# name of the dataset without the extension (.nex is assumed by default)
+DATASET = args[1]
+# directory for the dataset
+DATA_DIR = args[2]
+# which model to use
+MODEL = args[3]
+# specify the output directory
+OUTPUT_DIR = args[4]
+
+# specify the number of MCMC chains to run. (default is 2)
+if (args.size() > 4) {
+    NUM_RUNS = args[5]
+} else
+    NUM_RUNS = 2
+
+# number of rate categories
+if (args.size() > 5) {
+  NUM_CATEGORIES = args[6]
+} else
+  NUM_CATEGORIES = 4
+
+# read in the data matrix
+morpho <- readDiscreteCharacterData(DATA_DIR + "/" + DATASET + ".nex")
+
+# helper variables
+taxa <- morpho.names()
+n_taxa <- taxa.size()
+n_branches <- 2 * n_taxa - 2
+
+# vectors for moves and monitors of the analysis
+moves = VectorMoves()
+monitors = VectorMonitors()
+
+# Tree Model
+source("scripts/RevScripts/model_tree.Rev")
+
+# substitution model (Mk/ACRV/Covarion_Unpart/Covarion_Part) (the Q matrices and PhyloCTMC are defined there)
+source("scripts/RevScripts/model_" + MODEL + ".Rev")
+
+## MCMC
+# initialize the model object
+mymodel = model(phylogeny)
+
+## vectors of monitors
+# for the full model
+monitors.append(mnModel(filename = OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.log", printgen = 100))
+# for trees
+monitors.append(mnFile(filename = OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.trees", printgen = 100, phylogeny))
+# for the screen
+monitors.append(mnScreen(printgen = 1000))
+
+# initialize MCMC
+mymcmc = mcmc(mymodel, monitors, moves, nruns = NUM_RUNS, combine = "mixed")
+# run the MCMC
+mymcmc.run(generations = 100000, tuningInterval = 100)
+mymcmc.operatorSummary()
+
+## Summarizing the tree
+# read in the tree
+trace = readTreeTrace(OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.trees", treetype = "non-clock", nruns = NUM_RUNS, burnin = 0.25)
+
+# Maximum `a posteriori` Tree
+mapTree(trace, file = OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.map.tre")
+
+# Exit RevBayes
+quit()

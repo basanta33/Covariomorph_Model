@@ -1,0 +1,68 @@
+# RevBayes Script -- Main model selection settings
+# Authors -- Basanta Khakurel and Sebastian Höhna
+
+## arguments to be suppllied using --args
+# name of the dataset without the extension (.nex is assumed by default)
+DATASET = args[1]
+# directory for the dataset
+DATA_DIR = args[2]
+# which model to use
+MODEL = args[3]
+# specify the output directory
+OUTPUT_DIR = args[4]
+
+# specify the number of MCMC chains to run. (default is 2)
+if (args.size() > 4) {
+    NUM_RUNS = args[5]
+} else
+    NUM_RUNS = 2
+
+# number of rate categories
+if (args.size() > 5) {
+  NUM_CATEGORIES = args[6]
+} else
+  NUM_CATEGORIES = 4
+
+# read in the data matrix
+morpho <- readDiscreteCharacterData(DATA_DIR + "/" + DATASET + ".nex")
+
+# helper variables
+taxa <- morpho.names()
+n_taxa <- taxa.size()
+n_branches <- 2 * n_taxa - 2
+
+# vectors for moves and monitors of the analysis
+moves = VectorMoves()
+monitors = VectorMonitors()
+
+# Tree Model
+source("scripts/RevScripts/model_tree.Rev")
+
+# substitution model (Mk or Covarion) (the Q matrices are defined here)
+source("scripts/RevScripts/model_" + MODEL + ".Rev")
+
+## MCMC
+# initialize the model object
+mymodel = model(phylogeny)
+
+analysis_name <- MODEL + NUM_CATEGORIES
+
+pow_p = powerPosterior(mymodel, moves, monitors, filename = OUTPUT_DIR + "/" + DATASET + "_" + analysis_name + "_Marginal_Likelihood.out", cats=127,sampleFreq=1)
+
+# MCMC iter:\t" + 20000
+# MCMC iter:\t" + round(20000/10.0)
+pow_p.burnin(generations=20000,tuningInterval=20)
+pow_p.run(generations=round(20000/10.0))
+
+ss = steppingStoneSampler(file = OUTPUT_DIR + "/" + DATASET + "_" + analysis_name + "_Marginal_Likelihood.out", powerColumnName="power", likelihoodColumnName="likelihood")
+
+write("Stepping stone marginal likelihood:\t", ss.marginal() )
+
+ps = steppingStoneSampler(file = OUTPUT_DIR + "/" + DATASET + "_" + analysis_name + "_Marginal_Likelihood.out", powerColumnName="power", likelihoodColumnName="likelihood")
+
+write("Path-sampling marginal likelihood:\t", ps.marginal() )
+
+write(file= OUTPUT_DIR + "/" + DATASET + "_" + analysis_name + "_Marginal_Likelihood.txt",analysis_name,ps.marginal(),ss.marginal(),"\n",sep=TAB,append=TRUE)
+
+
+quit()

@@ -1,0 +1,80 @@
+# RevBayes Script -- model file for the covariomorph model
+# This script sets up a partitioned by number of states model
+# Authors -- Basanta Khakurel and Sebastian Höhna
+
+## Rate Scalars
+# mean
+mean_category <- 0.0
+# sd (just to initialize the variable)
+sd_category <- 1
+
+# using prior on inverse of SD so that the prior does not become biased
+inverse_sd ~ dnUniform(0, 1E3)
+inverse_sd.setValue(1)
+
+moves.append(mvScale(inverse_sd, lambda = 0.1, tune = true, weight = 4))
+
+# finally specify the actual sd value
+sd_category := 1/inverse_sd
+
+# obtain rates via a discretized lognormal distribution
+rate_scalars := normalize(fnDiscretizeDistribution(dnLognormal(mean_category, sd_category), NUM_CATEGORIES))
+
+# assuming equal rate of switching
+global_switch_rate ~ dnUniform(0,1E4)
+global_switch_rate.setValue(0.001)
+moves.append(mvScale(global_switch_rate, weight = 2))
+
+switching_rate := global_switch_rate * (1/(NUM_CATEGORIES - 1))
+
+for (i in 1:NUM_CATEGORIES) {
+    for (j in 1:NUM_CATEGORIES) {
+        if (i == j) {
+            switch_rates[i][j] := 0
+        } else {
+            switch_rates[i][j] := switching_rate
+        }
+    }
+}
+
+# setting up the Q-matrices for characters with the same number of states
+max_states = morpho.getStateDescriptions().size()
+
+# this loop saves data matrices with same number of states into different files and reads it back in again.
+for (i in 1:(max_states-1)) {
+  partition_state[i] = morpho
+
+  partition_state[i].setNumStatesPartition(i+1)
+
+  temp_data <- partition_state[i]
+  temp_data.removeExcludedCharacters()
+
+  print("Processing data subset with " + (i+1) + " states...")
+
+  writeNexus(filename = "tmp/" +DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats_" + (i+1) + "_States.nexus", temp_data)
+
+  print("State labels for data subset with " + (i+1) + " states...")
+  temp_data.getStateDescriptions()
+
+  tmp_data = readDiscreteCharacterData("tmp/" +DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats_" + (i+1) + "_States.nexus")
+
+  partition_state[i] = tmp_data
+
+  nc = partition_state[i].nchar()
+
+  if (nc > 0) {
+    print("There are " + nc + " characters with " + (i+1) + " states in the morphological data matrix.\n")
+
+    for (j in 1:NUM_CATEGORIES) {
+      Q_sub[i][j] := fnJC(i+1)
+    }
+
+    Q_morpho[i] := fnCovarion(Q_sub[i], RateScalars = rate_scalars, SwitchRates = switch_rates, rescaled = FALSE)
+
+    phyMorpho[i] ~ dnPhyloCTMC(tree = phylogeny, Q = Q_morpho[i], nSites = nc, type = "NaturalNumbers")
+
+    expanded_partition_state[i] = partition_state[i].expandCharacters(NUM_CATEGORIES)
+
+    phyMorpho[i].clamp(expanded_partition_state[i])
+  }
+}
